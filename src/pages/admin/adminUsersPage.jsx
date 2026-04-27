@@ -43,7 +43,7 @@ export default function AdminUsersPage() {
                 <th className="px-6 py-4">Last Name</th>
                 <th className="px-6 py-4">Admin</th>
                 <th className="px-6 py-4 text-center">Status</th>
-                <th className="px-6 py-4 text-right">Action</th>
+                <th className="px-6 py-4 text-center">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -56,7 +56,7 @@ export default function AdminUsersPage() {
                         alt="Profile"
                         className="w-full h-full object-cover rounded-full ring-2 ring-slate-100"
                         onError={(e) => {
-                          e.target.src = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                          e.target.src = "https://rlawualidanksomoidky.supabase.co/storage/v1/object/public/Images/defaultprofileBG%20.jpg";
                         }}
                       />
                     </div>
@@ -89,28 +89,38 @@ export default function AdminUsersPage() {
                     </span>
                   </td>
 
-                  <td className="px-6 py-4 text-right">
-                    <button
-                      onClick={async () => {
-                        try {
-                          await axios.put(
-                            import.meta.env.VITE_BACKEND_URL + `/users/toggle-block/${item.email}`,
-                            { isBlocked: !item.isBlocked },
-                            { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
-                          );
-                          setLoaded(false);
-                        } catch (err) {
-                          console.log(err);
-                        }
-                      }}
-                      className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm border ${
-                        item.isBlocked 
-                          ? "bg-white border-blue-100 text-[#2563eb] hover:bg-blue-50/50 shadow-[0_2px_10px_-3px_rgba(0,0,0,0.07)]" 
-                          : "bg-[#2563eb] border-[#2563eb] text-white hover:bg-[#1d4ed8]"
-                      }`}
-                    >
-                      {item.isBlocked ? "Unblock User" : "Block User"}
-                    </button>
+                  {/* Action — center, disabled + grey for admins */}
+                  <td className="px-6 py-4 text-center">
+                    {item.isAdmin ? (
+                      <button
+                        disabled
+                        className="px-4 py-1.5 rounded-lg text-xs font-semibold border bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed"
+                      >
+                        Block User
+                      </button>
+                    ) : (
+                      <button
+                        onClick={async () => {
+                          try {
+                            await axios.put(
+                              import.meta.env.VITE_BACKEND_URL + `/users/toggle-block/${item.email}`,
+                              { isBlocked: !item.isBlocked },
+                              { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+                            );
+                            setLoaded(false);
+                          } catch (err) {
+                            console.log(err);
+                          }
+                        }}
+                        className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all shadow-sm border ${
+                          item.isBlocked 
+                            ? "bg-white border-blue-100 text-[#2563eb] hover:bg-blue-50/50" 
+                            : "bg-[#2563eb] border-[#2563eb] text-white hover:bg-[#1d4ed8]"
+                        }`}
+                      >
+                        {item.isBlocked ? "Unblock User" : "Block User"}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

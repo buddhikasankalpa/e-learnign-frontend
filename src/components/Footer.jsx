@@ -16,9 +16,10 @@ export default function Footer() {
         {/* Links Section */}
         <div className="flex flex-col gap-4">
           <h4 className="font-bold text-gray-900 uppercase text-sm tracking-widest">Platform</h4>
-          <Link to="/about" className="text-gray-500 hover:text-blue-600 transition-colors">About Us</Link>
           <Link to="/categories" className="text-gray-500 hover:text-blue-600 transition-colors">Course Catalog</Link>
+          <Link to="/myLearning" className="text-gray-500 hover:text-blue-600 transition-colors">My Learning</Link>          
           <Link to="/instructors" className="text-gray-500 hover:text-blue-600 transition-colors">Instructors</Link>
+          <Link to="/about" className="text-gray-500 hover:text-blue-600 transition-colors">About Us</Link>
         </div>
 
         <div className="flex flex-col gap-4">

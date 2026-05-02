@@ -41,9 +41,6 @@ export default function Admin() {
           <Link className="h-[46px] flex items-center gap-3 px-4 text-white hover:bg-blue-600 rounded-lg transition text-sm font-medium" to="/admin/teachers">
             <GiTeacher size={18} /> Teachers
           </Link>
-          <Link className="h-[46px] flex items-center gap-3 px-4 text-white hover:bg-blue-600 rounded-lg transition text-sm font-medium" to="/admin/enrollments">
-            <FaBookOpenReader size={18} /> Enrollments
-          </Link>
         </nav>
       </div>
 
@@ -56,7 +53,6 @@ export default function Admin() {
           <Route path="/videos" element={<AdminVideosPage />} />
           <Route path="/users" element={<AdminUsersPage />} />
           <Route path="/teachers" element={<AdminTeachersPage />} />
-          <Route path="/enrollments" element={<h1>Enrollments Page</h1>} />
           <Route path="/add-course" element={<AdminAddCoursePage />} />
         </Routes>
       </div>

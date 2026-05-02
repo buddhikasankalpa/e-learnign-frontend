@@ -13,6 +13,10 @@ import Footer from "../components/Footer";
 import CourseVideos from "./courseVideos";
 import NotFound from "../components/NotFound";
 import InstructorsPage from "./instructorsPage"
+import AboutUsPage from "./AboutUsPage";
+import TermsServicePage from "./TermsService";
+import PrivacyPolicyPage from "./PrivacyPolicyPage";
+import ContactSupportPage from "./ContactSupportPage";
 
 export default function Homepage() {
   return (
@@ -33,6 +37,10 @@ export default function Homepage() {
             <Route path="/*" element={<NotFound />} />
             <Route path="/course/:courseId" element={<CourseVideos/>}/>
             <Route path="/instructors" element={<InstructorsPage />} />
+            <Route path="/about" element={<AboutUsPage />}/>
+            <Route path="/terms" element={<TermsServicePage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/contact" element={<ContactSupportPage/>} />
           </Routes>
         </div>
       </main>

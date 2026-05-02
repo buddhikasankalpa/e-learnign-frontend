@@ -146,9 +146,12 @@ export default function LoginPage() {
             </div>
 
             {/* Button */}
-            <button className="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
-              onClick={login}>
-              Sign In to Scholarly
+            <button 
+              className="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+              onClick={login}
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Sign In to Scholarly"}
             </button>
 
             {/* Divider */}
@@ -159,12 +162,13 @@ export default function LoginPage() {
             </div>
 
             {/* Social Logins - Only Google Now */}
-            <div className="flex">
-              <button className="w-full flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-gray-700 py-3 rounded-xl font-bold transition text-sm border border-gray-100"
-                onClick={googleLogin}>
-                <GrGoogle className="mr-2 text-lg text-blue-600"/> Google
-              </button>
-            </div>
+            <button 
+              className="w-full flex items-center justify-center bg-gray-50 hover:bg-gray-100 text-gray-700 py-3 rounded-xl font-bold transition text-sm border border-gray-100 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
+              onClick={googleLogin}
+              disabled={isLoading}
+            >
+              <GrGoogle className="mr-2 text-lg text-blue-600"/> Google
+            </button>
 
             {/* Footer */}
             <p className="text-center text-sm text-gray-500 mt-8">

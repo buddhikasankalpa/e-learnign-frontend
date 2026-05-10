@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion"; // <-- Added Framer Motion
 import Loader from "../components/loader";
 import CourseCard from "../components/courseCard";
 import CategoriesHeroSection from "../components/categoriesHeroSection";
@@ -44,6 +45,27 @@ export default function CourseCategoriesPage() {
         );
     }
 
+    // Animation Variants
+    const headerVariant = {
+        hidden: { opacity: 0, y: -20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+    };
+
+    const gridContainerVariant = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.15 // Controls the delay between each card appearing
+            }
+        }
+    };
+
+    const buttonVariant = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    };
+
     return (
         <div className="w-full min-h-[calc(100vh-100px)] flex flex-col bg-gray-50 pt-10 pb-20">
             <CategoriesHeroSection query={query} />
@@ -51,8 +73,13 @@ export default function CourseCategoriesPage() {
             <div className="w-full flex justify-center p-4">
                 <div className="w-full max-w-7xl mx-auto px-8 py-8">
                     
-                    {/* Header Section */}
-                    <div className="mb-12 border-b border-slate-200 pb-10">
+                    {/* Header Section with Animation */}
+                    <motion.div 
+                        variants={headerVariant}
+                        initial="hidden"
+                        animate="visible"
+                        className="mb-12 border-b border-slate-200 pb-10"
+                    >
                         <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-5 tracking-tight">
                             {query ? (
                                 <span>
@@ -67,27 +94,43 @@ export default function CourseCategoriesPage() {
                                 ? `Discover ${course.length} specialized programs matching your search criteria.` 
                                 : "Explore our comprehensive curriculum designed to bridge the gap between learning and industry mastery. Choose your path and start your journey today."}
                         </p>
-                    </div>
+                    </motion.div>
                     {/* End of Header Section */}
 
                     {course.length === 0 ? (
-                        <div className="w-full flex justify-center items-center h-[300px]">
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            className="w-full flex justify-center items-center h-[300px]"
+                        >
                             <p className="text-gray-500 text-xl font-[Inter]">No courses found.</p>
-                        </div>
+                        </motion.div>
                     ) : (
                         <>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {/* Grid Section with Staggered Animation */}
+                            <motion.div 
+                                variants={gridContainerVariant}
+                                initial="hidden"
+                                animate="visible"
+                                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+                            >
                                 {course.slice(0, visibleCount).map((item) => (
                                     <CourseCard
                                         key={item.courseId || item._id}
                                         course={item}
                                     />
                                 ))}
-                            </div>
+                            </motion.div>
 
-                            {/* Load More Button */}
+                            {/* Load More Button Animation */}
                             {visibleCount < course.length && (
-                                <div className="w-full flex justify-center mt-16">
+                                <motion.div 
+                                    variants={buttonVariant}
+                                    initial="hidden"
+                                    whileInView="visible"
+                                    viewport={{ once: true, amount: 0.5 }}
+                                    className="w-full flex justify-center mt-16"
+                                >
                                     <button 
                                         onClick={loadMore}
                                         className="group inline-flex items-center gap-4 bg-white px-10 py-4 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-600/30 transition-all hover:shadow-md active:scale-95 cursor-pointer"
@@ -106,7 +149,7 @@ export default function CourseCategoriesPage() {
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                         </svg>
                                     </button>
-                                </div>
+                                </motion.div>
                             )}
                         </>
                     )}

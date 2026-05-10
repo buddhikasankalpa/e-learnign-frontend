@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { motion } from "framer-motion"; // <-- Added Framer Motion
 import Loader from "../components/loader";
 import { getCart, addToCart } from "../utils/cart"; 
 
@@ -27,6 +28,32 @@ export default function ProductOverview() {
       });
   }, [params.courseId]);
 
+  // Animation Variants
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15, // Staggers the loading of child sections
+      },
+    },
+  };
+
+  const fadeUpVariant = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
+  const fadeLeftVariant = {
+    hidden: { opacity: 0, x: 40 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
+  const scaleUpVariant = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.6, ease: "easeOut" } },
+  };
+
   return (
     <div className="w-full min-h-screen bg-white">
       {status === "loading" && (
@@ -36,17 +63,27 @@ export default function ProductOverview() {
       )}
 
       {status === "error" && (
-        <div className="w-full h-[60vh] flex flex-col items-center justify-center">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }} 
+          animate={{ opacity: 1, scale: 1 }} 
+          className="w-full h-[60vh] flex flex-col items-center justify-center"
+        >
           <h1 className="text-2xl font-bold text-gray-800">Oops! Course Not Found</h1>
           <p className="text-gray-500 mt-2">Please try again.</p>
-        </div>
+        </motion.div>
       )}
 
       {status === "success" && course && (
-        <main className="pt-24 pb-20 px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12">
+        <motion.main 
+          variants={containerVariant}
+          initial="hidden"
+          animate="visible"
+          className="pt-24 pb-20 px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12"
+        >
           
           <div className="lg:col-span-8 space-y-12">
-            <section className="space-y-4">
+            {/* Header Section */}
+            <motion.section variants={fadeUpVariant} className="space-y-4">
               <nav className="flex gap-2 text-sm text-gray-500">
                 <span className="hover:text-blue-600 cursor-pointer" onClick={() => navigate("/")}>Course Catalog</span>
                 <span>/</span>
@@ -75,17 +112,19 @@ export default function ProductOverview() {
                   <span>👥 12,450 students enrolled</span>
                 </div>
               </div>
-            </section>
+            </motion.section>
 
-            <section className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-gray-100 border border-gray-100">
+            {/* Thumbnail Section */}
+            <motion.section variants={scaleUpVariant} className="relative aspect-video rounded-3xl overflow-hidden shadow-2xl bg-gray-100 border border-gray-100">
               <img 
                 src={course.thumbnail || "https://via.placeholder.com/1280x720"} 
                 alt={course.title} 
                 className="w-full h-full object-cover"
               />
-            </section>
+            </motion.section>
 
-            <section className="bg-gray-50 p-8 rounded-3xl space-y-6">
+            {/* What you'll learn Section */}
+            <motion.section variants={fadeUpVariant} className="bg-gray-50 p-8 rounded-3xl space-y-6">
               <h2 className="text-2xl font-bold text-gray-900">What you'll learn</h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {[
@@ -100,9 +139,10 @@ export default function ProductOverview() {
                   </div>
                 ))}
               </div>
-            </section>
+            </motion.section>
 
-            <section className="space-y-6">
+            {/* Course Content Section */}
+            <motion.section variants={fadeUpVariant} className="space-y-6">
               <div className="flex justify-between items-end">
                 <h2 className="text-2xl font-bold text-gray-900">Course Content</h2>
                 <span className="text-sm text-gray-500 font-semibold">{course.duration || "12h 45m"} total length</span>
@@ -117,10 +157,11 @@ export default function ProductOverview() {
                   </div>
                 ))}
               </div>
-            </section>
+            </motion.section>
           </div>
 
-          <aside className="lg:col-span-4">
+          {/* Sticky Sidebar Section */}
+          <motion.aside variants={fadeLeftVariant} className="lg:col-span-4">
             <div className="sticky top-28 space-y-6">
               <div className="bg-white p-8 rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] border border-gray-100">
                 <div className="space-y-6">
@@ -187,9 +228,9 @@ export default function ProductOverview() {
                 </div>
               </div>
             </div>
-          </aside>
+          </motion.aside>
           
-        </main>
+        </motion.main>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; 
+import { motion, AnimatePresence } from "framer-motion"; // <-- Added Framer Motion
 
 export default function UserData() {
   const [user, setUser] = useState(null);
@@ -35,7 +36,7 @@ export default function UserData() {
           <img referrerPolicy="no-referrer"
             src={user.image || defaultImage} 
             onError={(e) => { e.target.src = defaultImage; }} // Fallback if image link is broken
-            className="w-[42px] h-[42px] rounded-full object-cover border-2 border-blue-100 shadow-sm cursor-pointer" 
+            className="w-[42px] h-[42px] rounded-full object-cover border-2 border-blue-100 shadow-sm cursor-pointer hover:border-blue-300 transition-colors" 
             alt="User profile"
             onClick={() => setIsOpen(!isOpen)} 
           />
@@ -48,36 +49,44 @@ export default function UserData() {
             >
               {user.firstName}
               <svg 
-                className={`w-4 h-4 ml-1 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+                className={`w-4 h-4 ml-1 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
                 fill="none" stroke="currentColor" viewBox="0 0 24 24"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </div>
 
-            {/* Dropdown Menu*/}
-            {isOpen && (
-              <div className="absolute right-0 top-full mt-3 w-40 bg-white border border-slate-100 rounded-xl shadow-lg py-2 z-50">
-                <button 
-                  className="block w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium"
-                  onClick={() => {
-                    window.location.href = "/orders";
-                    setIsOpen(false);
-                  }}
+            {/* Dropdown Menu with Framer Motion */}
+            <AnimatePresence>
+              {isOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="absolute right-0 top-full mt-3 w-40 bg-white border border-slate-100 rounded-xl shadow-lg py-2 z-50 origin-top-right"
                 >
-                  My Courses
-                </button>
-                <button 
-                  className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors font-medium"
-                  onClick={() => {
-                    localStorage.removeItem("token");
-                    window.location.href = "/login";
-                  }}
-                >
-                  Logout
-                </button>
-              </div>
-            )}
+                  <button 
+                    className="block w-full text-left px-4 py-2.5 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors font-medium cursor-pointer"
+                    onClick={() => {
+                      window.location.href = "/orders";
+                      setIsOpen(false);
+                    }}
+                  >
+                    My Courses
+                  </button>
+                  <button 
+                    className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors font-medium cursor-pointer"
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      window.location.href = "/login";
+                    }}
+                  >
+                    Logout
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       ) : (
@@ -85,7 +94,7 @@ export default function UserData() {
           <Link to="/login" className="text-slate-600 hover:text-blue-600 font-bold text-base transition-all">
             Login
           </Link>
-          <Link to="/register" className="bg-blue-600 text-white px-7 py-2.5 rounded-xl font-bold text-base hover:bg-blue-700 transition-all duration-200 shadow-sm">
+          <Link to="/register" className="bg-blue-600 text-white px-7 py-2.5 rounded-xl font-bold text-base hover:bg-blue-700 transition-all duration-200 shadow-sm active:scale-95">
             Sign Up
           </Link>
         </div>

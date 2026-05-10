@@ -166,9 +166,11 @@ export default function RegisterPage() {
             </div>
 
             {/* Button */}
-            <button className="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30"
-              onClick={register}>
-              Create Account
+            <button className="w-full bg-blue-600 text-white py-3.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-600/30 cursor-pointer"
+              onClick={register}
+              disabled={isLoading}
+              >
+              {isLoading ? "Loading..." : "Create Account"}
             </button>
 
             {/* Footer */}

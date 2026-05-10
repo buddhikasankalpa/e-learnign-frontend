@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, NavLink, Link } from 'react-router-dom';
 import { MdDashboard } from "react-icons/md";
 import { IoCalendarClear } from "react-icons/io5";
 import { BiSolidVideos } from "react-icons/bi";
@@ -15,37 +15,53 @@ import AdminVideosPage from "./admin/adminVideosPage";
 import AdminTeachersPage from "./admin/adminTeachersPage";
 
 export default function Admin() {
-  return (
-    <div className="w-screen h-screen flex overflow-hidden">
+  // translate-x-1 ඉවත් කරලා, පළල w-[96%] කරලා ලස්සනට මැදට ගත්තා shadow එක කැපෙන්නේ නැති වෙන්න
+  const navLinkClass = ({ isActive }) =>
+    `h-[48px] w-[96%] mx-auto flex items-center gap-4 px-5 rounded-xl transition-all duration-300 text-sm font-medium ${
+      isActive
+        ? "bg-blue-600 text-white shadow-md shadow-blue-600/40"
+        : "text-slate-400 hover:bg-slate-800 hover:text-white hover:translate-x-1"
+    }`;
 
-      <div className="fixed top-0 left-0 h-screen w-[250px] bg-[#0F172A] flex flex-col z-50">
+  return (
+    <div className="w-screen h-screen flex overflow-hidden bg-slate-50">
+      {/* ── Sidebar ── */}
+      <div className="fixed top-0 left-0 h-screen w-[260px] bg-[#0B1120] flex flex-col z-50 shadow-2xl border-r border-slate-800/50">
         <Link
-          className="w-full h-[50px] bg-[#0F172A] text-[#60A5FA] border-b border-white/20 flex items-center justify-center font-bold text-lg tracking-wide shrink-0"
+          className="w-full h-[70px] flex items-center gap-3 px-8 border-b border-slate-800/80 shrink-0 group"
           to="/"
         >
-          Scholarly
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center shadow-md shadow-blue-600/40 group-hover:scale-105 transition-transform">
+            <FaBookOpenReader className="text-white" size={16} />
+          </div>
+          <span className="text-white font-bold text-xl tracking-wide">Scholarly</span>
         </Link>
-        <nav className="flex flex-col p-3 gap-1 flex-1 overflow-y-auto">
-          <Link className="h-[46px] flex items-center gap-3 px-4 text-white hover:bg-blue-600 rounded-lg transition text-sm font-medium" to="/admin/">
-            <MdDashboard size={18} /> Dashboard
-          </Link>
-          <Link className="h-[46px] flex items-center gap-3 px-4 text-white hover:bg-blue-600 rounded-lg transition text-sm font-medium" to="/admin/courses">
-            <IoCalendarClear size={18} /> Courses
-          </Link>
-          <Link className="h-[46px] flex items-center gap-3 px-4 text-white hover:bg-blue-600 rounded-lg transition text-sm font-medium" to="/admin/videos">
-            <BiSolidVideos size={18} /> Videos
-          </Link>
-          <Link className="h-[46px] flex items-center gap-3 px-4 text-white hover:bg-blue-600 rounded-lg transition text-sm font-medium" to="/admin/users">
-            <FaUsers size={18} /> Users
-          </Link>
-          <Link className="h-[46px] flex items-center gap-3 px-4 text-white hover:bg-blue-600 rounded-lg transition text-sm font-medium" to="/admin/teachers">
-            <GiTeacher size={18} /> Teachers
-          </Link>
-        </nav>
+        
+        {/* Padding වෙනස් කරලා තියෙනවා Shadow එකට ඉඩ තියන්න */}
+        <div className="py-6 flex flex-col flex-1 overflow-hidden">
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-6">Main Menu</p>
+          <nav className="flex flex-col gap-2 flex-1 overflow-y-auto px-2 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <NavLink end className={navLinkClass} to="/admin/">
+              <MdDashboard size={20} /> Dashboard
+            </NavLink>
+            <NavLink className={navLinkClass} to="/admin/courses">
+              <IoCalendarClear size={20} /> Courses
+            </NavLink>
+            <NavLink className={navLinkClass} to="/admin/videos">
+              <BiSolidVideos size={20} /> Videos
+            </NavLink>
+            <NavLink className={navLinkClass} to="/admin/users">
+              <FaUsers size={20} /> Users
+            </NavLink>
+            <NavLink className={navLinkClass} to="/admin/teachers">
+              <GiTeacher size={20} /> Teachers
+            </NavLink>
+          </nav>
+        </div>
       </div>
 
-      {/* ── Main Content (sidebar width offset) ── */}
-      <div className="ml-[250px] flex-1 h-screen overflow-y-auto bg-[#F9FAFB]">
+      {/* ── Main Content ── */}
+      <div className="ml-[260px] flex-1 h-screen overflow-y-auto bg-slate-50/50">
         <Routes>
           <Route path="/" element={<AdminOrdersPage />} />
           <Route path="/courses" element={<AdminCoursePage />} />
@@ -56,7 +72,6 @@ export default function Admin() {
           <Route path="/add-course" element={<AdminAddCoursePage />} />
         </Routes>
       </div>
-
     </div>
   );
 }
